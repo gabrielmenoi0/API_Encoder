@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  api:
+    image: 'openjdk:11'
+    #    command: java -cp /app/resources:/app/classes:/app/libs/* com.h2database.server.web.WebServlet -pgWeb
+    volumes:
+      - './data:/data'
+      - './src/main/resources:/app/resources'
+      - './target/classes:/app/classes'
+      - './target/libs:/app/libs'
+    ports:
+      - '8081:8081'
+    environment:
+      - 'DB_DRIVER=org.h2.Driver'
+      - 'DB_URL=jdbc:h2:mem:urldb'
+      - 'DB_USERNAME=sa'
+      - 'DB_PASSWORD='
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "82:80"
+    volumes:
+      - ./nginx.conf:/otp/homebrew/nginx/etc/nginx/nginx.conf
+    depends_on:
+      - app
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "8082:8080"
+    environment:
+      - REDIS_HOST=redis
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - database
+  database:
+    image: postgres
+    container_name: database
+    environment:
+      - POSTGRES_DB=h2db
+      - POSTGRES_USER=h2user
+      - POSTGRES_PASSWORD=h2password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
