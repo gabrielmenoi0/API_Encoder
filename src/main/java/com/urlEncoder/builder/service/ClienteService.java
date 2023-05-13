@@ -21,23 +21,35 @@ public class ClienteService {
         this.repository = repository;
     }
 
+    private static ClienteService instance = null;
+    private Cliente cliente;
+
+    private ClienteService() {}
+
+    public static ClienteService getInstance() {
+        if (instance == null) {
+            instance = new ClienteService();
+        }
+        return instance;
+    }
+
+    public void setCliente(ReciveClienteDTO clienteRecive) {
+        cliente = new Cliente();
+        cliente.setNome(clienteRecive.getNome());
+        cliente.setSenha(clienteRecive.getSenha());
+        cliente.setEmail(clienteRecive.getEmail());
+        cliente.setDateRegister(dateSave());
+        cliente.setToken(generateToken(clienteRecive.getSenha()));
+    }
+
+    /// Método save cadastra no banco um Cliente, usando uma função disponibilizada pela ORM e usando o Pattern Singleton
     public String save(ReciveClienteDTO clienteRecive) {
-        ClienteBuilder clienteBuilder = new ClienteBuilder()
-                .setNome(clienteRecive.getNome())
-                .setSenha(clienteRecive.getSenha())
-                .setEmail(clienteRecive.getEmail())
-                .setDateRegister(dateSave())
-                .setToken(generateToken(clienteRecive.getSenha()));
-        Cliente cliente = new Cliente();
-        cliente.setDateRegister(clienteBuilder.build().getDateRegister());
-        cliente.setEmail(clienteBuilder.build().getEmail());
-        cliente.setNome(clienteBuilder.build().getNome());
-        cliente.setToken(clienteBuilder.build().getToken());
-        cliente.setSenha(clienteBuilder.build().getSenha());
+        setCliente(clienteRecive);
         Cliente result = repository.save(cliente);
         return result.getToken();
     }
 
+    /// Método findAll recupera o uma lista Clientes cadastradas, buscando com a função disponibilizada pela ORM
     public List<Cliente> findAll() {
         return repository.findAll();
     }
@@ -47,10 +59,12 @@ public class ClienteService {
         return dataNascimento.toString();
     }
 
+    /// Método findById recupera um Cliente cadastrado, buscando com a função disponibilizada pela ORM
     public Optional<Cliente> findById(UUID id) {
         return repository.findById(id);
     }
 
+    /// Método alterCliente altera o cliente informado, com as novas informações usando o patter Builder
     public Cliente alterCliente(Cliente cliente) {
         repository.deleteById(cliente.getId());
         ClienteBuilder clienteBuilder = new ClienteBuilder()
@@ -58,7 +72,7 @@ public class ClienteService {
                 .setSenha(cliente.getSenha())
                 .setEmail(cliente.getEmail())
                 .setDateRegister(dateSave())
-                .setToken(generateToken(cliente.getSenha()));
+                .setToken(generateToken(cliente.getSenha())).build();
         Cliente newCliente = new Cliente();
         newCliente.setDateRegister(clienteBuilder.build().getDateRegister());
         newCliente.setEmail(clienteBuilder.build().getEmail());
@@ -68,6 +82,7 @@ public class ClienteService {
         return repository.save(newCliente);
     }
 
+    /// Método findByToken realiza uma busca e retorna o cliente atravez do token informado usando o patter Builder
     public Optional<ClienteBuilder> findByToken(String token) {
         List<Cliente> list = repository.findAll();
         ClienteBuilder user = new ClienteBuilder().build();
@@ -81,9 +96,10 @@ public class ClienteService {
                 user.setSenha(element.getSenha());
             }
         });
-        return Optional.of(user);
+        return Optional.of(user.build());
     }
 
+    /// Método findRegister realiza uma busca e retorna o cliente atravez do email informado usando o patter Builder
     public Optional<ClienteBuilder> findRegister(String email) {
         List<Cliente> list = repository.findAll();
         ClienteBuilder user = new ClienteBuilder().build();
@@ -97,17 +113,19 @@ public class ClienteService {
                 user.setSenha(element.getSenha());
             }
         });
-        return Optional.of(user);
+        return Optional.of(user.build());
     }
-
+    /// Método delete apaga um Cliente, utilizando com a função disponibilizada pela ORM
     public void delete(Cliente cliente) {
         repository.delete(cliente);
     }
 
+    /// Método deletebyid apaga uma Cliente pelo ID, utilizando com a função disponibilizada pela ORM
     public void deletebyid(UUID id) {
         repository.deleteById(id);
     }
 
+    /// Método generateToken retorna uma String com o Token JWT utilizando "Jwts" usando o patter Builder
     public String generateToken(String password) {
         String secret = "JsonWebToken";
         Map<String, Object> claims = new HashMap<>();
@@ -118,4 +136,4 @@ public class ClienteService {
                 .setExpiration(new Date(System.currentTimeMillis() + 100000 * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
-    }
+}

@@ -91,6 +91,9 @@ public class Url implements Serializable {
 
     public Url() {
     }
+    public Url build() {
+        return this;
+    }
 
 
 }

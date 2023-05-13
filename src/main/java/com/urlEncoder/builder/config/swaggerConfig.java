@@ -12,7 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class swaggerConfig {
-
+    /// Configurações do Swagger são feitas usando o Pattern Builder
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false).apiInfo(apiInfo())
@@ -23,8 +23,9 @@ public class swaggerConfig {
                 .build();
     }
 
+    /// Definição das informações visuais da Documentação
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("API Encoder (Builder)")
+        return new ApiInfoBuilder().title("API Encoder")
                 .description("API em desenvolvimento na aula de Development and Desing Patterns")
                 .version("1.0")
                 .build();

@@ -16,6 +16,7 @@ public class loginServices {
     @Autowired
     private ClienteRepository repository;
 
+    /// Método login verifica e retorna o Objeto Cliente baseado no resultado das suas credenciais usando o Patter Builder
     public Optional<ClienteBuilder> login(login info) {
         List<Cliente> list = repository.findAll();
         ClienteBuilder clienteBuilder = new ClienteBuilder();

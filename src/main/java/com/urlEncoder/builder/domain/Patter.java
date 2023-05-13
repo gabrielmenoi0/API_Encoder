@@ -29,7 +29,7 @@ public class Patter<T> {
 
         public Patter<T> build() {
             if (supplier == null) {
-                throw new IllegalStateException("Function must be defined");
+                throw new IllegalStateException("A função deve ser definida");
             }
             return new Patter<>(supplier);
         }

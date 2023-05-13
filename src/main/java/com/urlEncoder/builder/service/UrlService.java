@@ -21,9 +21,12 @@ public class UrlService {
     @Autowired
     private ClienteService clienteService;
 
+    /// Método findAll recupera o uma lista URL cadastradas, buscando com a função disponibilizada pela ORM
     public List<Url> findAll() {
         return repositoryUrl.findAll();
     }
+
+    /// Método findByToken recupera o uma lista URL cadastradas por um usuário, buscando com a função disponibilizada pela ORM
     public List<Url> findByToken(String token) {
         List<Url> list = repositoryUrl.findAll();
         List<Url> urlList = new ArrayList<Url>();
@@ -34,17 +37,19 @@ public class UrlService {
         });
         return urlList;
     }
+    /// Método Save salva a url Usando o Patter Builder
     public Url save(String url, ClienteBuilder user){
-       UrlBuilder urlBuilder = new UrlBuilder()
+        Url urlBuilder = new UrlBuilder()
                 .withUrl(url)
                 .withUserId(user.getId())
                 .withHash(generateHash(url))
                 .withDateSave(LocalDate.now())
-                .withDateExpired(LocalDate.now().plusDays(1));
+                .withDateExpired(LocalDate.now().plusDays(1)).build();
         Url urlSaved = urlBuilder.build();
         return repositoryUrl.save(urlSaved);
     }
 
+    /// Método findById busca e recupera por ID uma URL cadastrada, buscando com a função disponibilizada pela ORM
     public Optional<Url> findById(UUID id) {
         return repositoryUrl.findById(id);
     }
@@ -52,29 +57,24 @@ public class UrlService {
         return repositoryUrl.findByhash(url);
     }
 
-//    private String generateHash(String url) {
-//        LocalDateTime time = LocalDateTime.now();
-//        String encodedUrl = Hashing.murmur3_32()
-//                .hashString(url.concat(time.toString()), StandardCharsets.UTF_8)
-//                .toString().substring(0, 6);
-//        return encodedUrl;
-//    }
+    /// Método generateHash gera uma HASH de 6 caracteres utilizando uma classe generica que constroi a função usando o patter Builder
     public String generateHash(String url) {
         LocalDateTime time = LocalDateTime.now();
 
         Patter<String> encodedUrlPatter = Patter.<String>builder()
                 .fromFunction(() -> Hashing.murmur3_32()
                         .hashString(url.concat(time.toString()), StandardCharsets.UTF_8)
-                        .toString().substring(0, 6))
-                .build();
+                        .toString().substring(0, 6)).build();
 
         return encodedUrlPatter.get();
     }
+
+    /// Método getHashUrl recupera o objeto URL que contai a HASH, buscando com a função disponibilizada pela ORM
     public Url getHashUrl(String hash) {
-        Url urlToRet = repositoryUrl.findByhash(hash);
-        return urlToRet;
+        return repositoryUrl.findByhash(hash);
     }
 
+    /// Método getUrl retorna uma Lista de URL utilizando uma classe generica que constroi a função usando o patter Builder
     public List<Url> getUrl(String url) {
         Patter<List<Url>> urlListPatter = Patter.<List<Url>>builder()
                 .fromFunction(() -> {
@@ -85,24 +85,17 @@ public class UrlService {
                         }
                     });
                     return urlList;
-                })
-                .build();
+                }).build();
 
         return urlListPatter.get();
     }
-//    public List<Url> getUrl(String url) {
-//        List<Url> urlList = new ArrayList<>();
-//        repositoryUrl.findAll().forEach(urlObj -> {
-//            if (urlObj.getUrl().equals(url)) {
-//                urlList.add(urlObj);
-//            }
-//        });
-//        return urlList;
-//    }
 
+    /// Método delete apaga uma URL, utilizando com a função disponibilizada pela ORM
     public void delete(Url url){
         repositoryUrl.delete(url);
     }
+
+    /// Método deletebyid apaga uma URL pelo ID, utilizando com a função disponibilizada pela ORM
     public void deletebyid(UUID id){
         repositoryUrl.deleteById(id);
     }
