@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 import springfox.documentation.annotations.Cacheable;
 
 import javax.servlet.http.HttpServletResponse;
@@ -85,14 +86,12 @@ public class UrlController {
     @Cacheable("url/hash")
     @GetMapping(path = "api/url/{hash}")
     @ApiOperation(value = "Busca e redireciona URL original pelo HASH")
-    public ResponseEntity<?> findHash(@PathVariable(value = "hash")String url, HttpServletResponse response){
+    public RedirectView findHash(@PathVariable(value = "hash")String url, HttpServletResponse response){
         Url urlToRet = services.getHashUrl(url);
-        try {
-            response.sendRedirect(urlToRet.getUrl());
-            return ResponseEntity.status(HttpStatus.OK).body(true);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
-        }
+        String urlRedirect = urlToRet.getUrl();
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl(urlRedirect); // URL para onde deseja redirecionar
+        return redirectView;
     }
 
     @Cacheable("url/url")
