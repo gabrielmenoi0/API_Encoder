@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-;
 @Repository("UrlRepository")
 public interface UrlRepository extends JpaRepository<Url, UUID> {
     public Url findByhash(String hash);
