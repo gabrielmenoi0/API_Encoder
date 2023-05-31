@@ -6,14 +6,13 @@ import com.urlEncoder.builder.service.UrlService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-import springfox.documentation.annotations.Cacheable;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,7 +30,7 @@ public class UrlController {
     @Cacheable("url/list")
     @GetMapping(path = "api/url/list/{token}")
     @ApiOperation(value = "Listagem de Urls")
-    public ResponseEntity  urls(@PathVariable(value = "token") String token){
+    public ResponseEntity urls(@PathVariable(value = "token") String token){
         var resultClient = clienteService.findByToken(token);
         if(resultClient.get().getToken() ==null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cliente já cadastrado!");

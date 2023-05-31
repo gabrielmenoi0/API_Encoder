@@ -67,9 +67,31 @@ O padrão Singleton pode ser implementado de várias maneiras, como usando um co
 <p align="justify">•  Memória: 1 GB</p>
 <p align="justify">•  Armazenamento 8 GB</p>
 
+## Teste de Stress
+Teste para 10000 mil requisições em 60 segundos
+
+<div align="center" class="row">
+<img src="readme/img_1.png" width="900" height="550"/>
+</div>
+
+## Metricas AWS Watch
+
+<div align="center" class="row">
+<img src="readme/1.jpeg" width="1000" height="550"/>
+</div>
+<div align="center" class="row">
+<img src="readme/2.jpeg" width="1000" height="550"/>
+<div align="center" class="row">
+<img src="readme/3.jpeg" width="1000" height="550"/>
+<div align="center" class="row">
+<img src="readme/4.jpeg" width="1000" height="550"/>
+</div>
+
+
 ## Integrantes da equipe
 <p align="justify">Gabriel Menoi - RA:602655</p>
 <p align="justify">Gabriel Mielo - RA:601128</p>
 <p align="justify">Matheus Araújo - RA:603236</p>
 <p align="justify">Tiago Santos - RA:603181</p>
 <p align="justify">Vitor Studzieski - RA:608661</p>
+<p align="justify">Pedro Cordeiro - RA:605271</p>
