@@ -54,6 +54,18 @@ O padrão Singleton pode ser implementado de várias maneiras, como usando um co
 <p align="justify"> * Cache (spring-boot-starter-cache e Redis)</p>
 <p align="justify"> * Banco de dados (H2)</p>
 
+## Link API publicada na AWS
+
+<div align="center">
+  • <a href="#Descrição do Projeto">http://ec2-3-133-130-193.us-east-2.compute.amazonaws.com:8082/swagger-ui.html#/</a>
+</div>
+
+## Configurações da máquina
+
+<p align="justify">•  SO: Ubuntu</p>
+<p align="justify">•  CPUs virtuais: 1 CPU Intel xeon E5-2686 v4 2.30ghz</p>
+<p align="justify">•  Memória: 1 GB</p>
+<p align="justify">•  Armazenamento 8 GB</p>
 
 ## Integrantes da equipe
 <p align="justify">Gabriel Menoi - RA:602655</p>
